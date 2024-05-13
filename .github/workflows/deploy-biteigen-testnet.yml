@@ -1,0 +1,98 @@
+name: Polrare CI x BitEigen Explorer development
+
+on:
+  push:
+    branches: [biteigen-testnet]
+
+env:
+  BASE_URL: https://explorer-testnet.biteigen.xyz
+  REMOTE_PATH: ~/BitEigen/explorer-frontend
+  PM2_NAME: biteigen-explorer-frontend
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    name: Build and deploy
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@master
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "yarn"
+          cache-dependency-path: yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --silent
+
+      - name: Setup environment
+        run: echo "${{ secrets.DOT_ENV_DEVELOPMENT }}" > .env
+        
+      - name: Build
+        run: |
+          npx dotenv -e .env -- bash -c './deploy/scripts/download_assets.sh ./public/assets/configs'
+          yarn svg:build-sprite
+          npx dotenv -e .env -- bash -c './deploy/scripts/make_envs_script.sh'
+          yarn build
+
+      - name: Sync code
+        uses: burnett01/rsync-deployments@5.1
+        with:
+          switches: -avzhq --exclude-from='rsync-exclude.txt' --delete-excluded
+          remote_path: ${{ env.REMOTE_PATH }}
+          remote_host: ${{ secrets.SERVER_HOST_DEVELOPMENT }}
+          remote_port: ${{ secrets.SERVER_PORT_DEVELOPMENT }}
+          remote_user: ${{ secrets.SERVER_USER_DEVELOPMENT }}
+          remote_key: ${{ secrets.SERVER_KEY_DEVELOPMENT }}
+
+      - name: Deploy
+        uses: cross-the-world/ssh-pipeline@v1.2.0
+        with:
+          host: ${{ secrets.SERVER_HOST_DEVELOPMENT }}
+          port: ${{ secrets.SERVER_PORT_DEVELOPMENT }}
+          user: ${{ secrets.SERVER_USER_DEVELOPMENT }}
+          key: ${{ secrets.SERVER_KEY_DEVELOPMENT }}
+          script: cd ${{ env.REMOTE_PATH }} && pm2 reload ${{ env.PM2_NAME }}
+
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v2
+        with:
+          url: ${{ env.BASE_URL }}
+          follow-redirect: true # Optional, defaults to "false"
+          max-attempts: 5 # Optional, defaults to 1
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+          # Retry all errors, including 404. This option might trigger curl upgrade.
+          retry-all: false # Optional, defaults to "false"
+
+      - name: Send notification to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_BOT_SECRET }}
+          format: markdown
+          message: |
+            *${{ github.workflow }} ✅*
+            ${{ github.actor }} deployed ${{ github.repository }}.
+            Dapp: ${{ env.BASE_URL }}
+            See changes: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            Check github action: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+  send_notification_build_failed:
+    needs: [build_and_deploy]
+    if: ${{ failure() }}
+    runs-on: ubuntu-latest
+    name: Send notification build failed
+    steps:
+      - name: Send notification to telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHANNEL }}
+          token: ${{ secrets.TELEGRAM_BOT_SECRET }}
+          format: markdown
+          message: |
+            *${{ github.workflow }} ❌*
+            ${{ github.actor }} deploy ${{ github.repository }} failed.
+            Check commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+            Check github action: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

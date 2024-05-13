@@ -83,6 +83,7 @@ const config: Feature<AdsBannerFeaturePayload> = (() => {
   return Object.freeze({
     title,
     isEnabled: false,
+    provider: null,
   });
 })();
 

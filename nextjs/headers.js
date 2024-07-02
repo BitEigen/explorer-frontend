@@ -28,6 +28,10 @@ async function headers() {
           key: 'Referrer-Policy',
           value: 'origin-when-cross-origin',
         },
+        {
+          key: 'Content-Security-Policy',
+          value: 'script-src \'self\'  https://secure.walletconnect.com \'unsafe-inline\' \'unsafe-eval\'',
+        },
       ],
     },
   ];

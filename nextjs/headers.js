@@ -30,7 +30,8 @@ async function headers() {
         },
         {
           key: 'Content-Security-Policy',
-          value: 'script-src \'self\'  https://secure.walletconnect.com \'unsafe-inline\' \'unsafe-eval\'',
+          // eslint-disable-next-line max-len
+          value: `frame-ancestors https://explorer.bitgrid3s.network 'self' http://localhost:* https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure.walletconnect.com; object-src 'none'`,
         },
       ],
     },

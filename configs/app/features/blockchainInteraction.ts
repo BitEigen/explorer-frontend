@@ -1,9 +1,10 @@
 import type { Feature } from './types';
 
 import chain from '../chain';
-import { getEnvValue } from '../utils';
+// import { getEnvValue } from '../utils';
 
-const walletConnectProjectId = getEnvValue('NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID');
+// const walletConnectProjectId = getEnvValue('NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID');
+const walletConnectProjectId = 'dc83461f8df1f300e7a5acf37220c1cc';
 
 const title = 'Blockchain interaction (writing to contract, etc.)';
 

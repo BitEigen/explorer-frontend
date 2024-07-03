@@ -35,9 +35,7 @@ const wagmiConfig = (() => {
       url: config.app.baseUrl,
       icons: [ config.UI.navigation.icon.default ].filter(Boolean),
     },
-    auth: {
-      email: true,
-    },
+    enableEmail: true,
     ssr: true,
     batch: { multicall: { wait: 100 } },
   });

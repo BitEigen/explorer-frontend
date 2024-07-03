@@ -21,6 +21,8 @@ const wagmiConfig = (() => {
 
     return wagmiConfig;
   }
+  // eslint-disable-next-line no-console
+  console.log('feature.walletConnect', feature.walletConnect);
 
   const wagmiConfig = defaultWagmiConfig({
     chains,
@@ -28,7 +30,8 @@ const wagmiConfig = (() => {
     transports: {
       [currentChain.id]: http(),
     },
-    projectId: feature.walletConnect.projectId,
+    // projectId: feature.walletConnect.projectId,
+    projectId: 'dc83461f8df1f300e7a5acf37220c1cc',
     metadata: {
       name: `${ config.chain.name } explorer`,
       description: `${ config.chain.name } explorer`,

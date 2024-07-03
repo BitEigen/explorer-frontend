@@ -28,11 +28,6 @@ async function headers() {
           key: 'Referrer-Policy',
           value: 'origin-when-cross-origin',
         },
-        {
-          key: 'Content-Security-Policy',
-          // eslint-disable-next-line max-len
-          value: `frame-ancestors https://explorer.bitgrid3s.network 'self' http://localhost:* https://*.vercel.app https://*.ngrok-free.app https://secure-mobile.walletconnect.com https://secure.walletconnect.com; object-src 'none'`,
-        },
       ],
     },
   ];

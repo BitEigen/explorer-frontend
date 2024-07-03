@@ -1,8 +1,8 @@
 import { Box, Flex, Heading } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 import React from 'react';
 
 import config from 'configs/app';
-import ChainIndicators from 'ui/home/indicators/ChainIndicators';
 import LatestBlocks from 'ui/home/LatestBlocks';
 import LatestZkEvmL2Batches from 'ui/home/LatestZkEvmL2Batches';
 import Stats from 'ui/home/Stats';
@@ -11,6 +11,9 @@ import AdBanner from 'ui/shared/ad/AdBanner';
 import ProfileMenuDesktop from 'ui/snippets/profileMenu/ProfileMenuDesktop';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
 import WalletMenuDesktop from 'ui/snippets/walletMenu/WalletMenuDesktop';
+const ChainIndicators = dynamic(() => import('ui/home/indicators/ChainIndicators'), {
+  ssr: false,
+});
 
 const rollupFeature = config.features.rollup;
 

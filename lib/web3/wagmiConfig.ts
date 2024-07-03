@@ -30,8 +30,7 @@ const wagmiConfig = (() => {
     transports: {
       [currentChain.id]: http(),
     },
-    // projectId: feature.walletConnect.projectId,
-    projectId: 'dc83461f8df1f300e7a5acf37220c1cc',
+    projectId: feature.walletConnect.projectId,
     metadata: {
       name: `${ config.chain.name } explorer`,
       description: `${ config.chain.name } explorer`,

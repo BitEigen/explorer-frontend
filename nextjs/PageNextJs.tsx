@@ -33,7 +33,7 @@ const PageNextJs = <Pathname extends Route['pathname']>(props: Props<Pathname>) 
     <>
       <Head>
         <title>{ title }</title>
-        <meta name="description" content={ description }/>
+        <meta name="description" content={ opengraph.description }/>
         { canonical && <link rel="canonical" href={ canonical }/> }
 
         { /* OG TAGS */ }

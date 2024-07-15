@@ -16,7 +16,7 @@ import NetworkAddToWallet from 'ui/shared/NetworkAddToWallet';
 
 import FooterLinkItem from './FooterLinkItem';
 import IntTxsIndexingStatus from './IntTxsIndexingStatus';
-import getApiVersionUrl from './utils/getApiVersionUrl';
+// import getApiVersionUrl from './utils/getApiVersionUrl';
 
 const MAX_LINKS_COLUMNS = 4;
 
@@ -30,7 +30,8 @@ const Footer = () => {
       staleTime: Infinity,
     },
   });
-  const apiVersionUrl = getApiVersionUrl(backendVersionData?.backend_version);
+  // const apiVersionUrl = getApiVersionUrl(backendVersionData?.backend_version);
+  const apiVersionUrl = null;
   // const issueUrl = useIssueUrl(backendVersionData?.backend_version);
   const logoColor = useColorModeValue('blue.600', 'white');
 

@@ -56,5 +56,8 @@ yarn-error.log*
 
 **.dec**
 
+# build outputs
+/tools/preset-sync/index.js
+
 .env
 .vercel

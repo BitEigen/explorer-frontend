@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 
 import config from 'configs/app';
-import useIsMobile from 'lib/hooks/useIsMobile';
 import LatestBlocks from 'ui/home/LatestBlocks';
 import LatestZkEvmL2Batches from 'ui/home/LatestZkEvmL2Batches';
 import Stats from 'ui/home/Stats';
@@ -19,8 +18,6 @@ const ChainIndicators = dynamic(() => import('ui/home/indicators/ChainIndicators
 const rollupFeature = config.features.rollup;
 
 const Home = () => {
-  const isMobile = useIsMobile();
-
   return (
     <Box as="main">
       <Flex
@@ -56,13 +53,13 @@ const Home = () => {
           </Flex>
           <SearchBar isHomepage/>
         </Box>
-        { !isMobile && <AdBanner platform="mobile" w="fit-content" flexShrink={ 0 } borderRadius="md" overflow="hidden"/> }
+        <AdBanner platform="mobile" w="fit-content" flexShrink={ 0 } borderRadius="md" overflow="hidden" display={{ base: 'none', lg: 'block ' }}/>
       </Flex>
       <Flex flexDir={{ base: 'column', lg: 'row' }} columnGap={ 2 } rowGap={ 1 } mt={ 3 } _empty={{ mt: 0 }}>
         <Stats/>
         <ChainIndicators/>
       </Flex>
-      { isMobile && <AdBanner mt={ 6 } mx="auto" display="flex" justifyContent="center"/> }
+      <AdBanner mt={ 6 } mx="auto" display={{ base: 'flex', lg: 'none' }} justifyContent="center"/>
       <Flex mt={ 8 } direction={{ base: 'column', lg: 'row' }} columnGap={ 12 } rowGap={ 6 }>
         { rollupFeature.isEnabled && rollupFeature.type === 'zkEvm' ? <LatestZkEvmL2Batches/> : <LatestBlocks/> }
         <Box flexGrow={ 1 }>
